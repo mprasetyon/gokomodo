@@ -1,4 +1,5 @@
 import Home from "./components/Home/Home";
+import Type from "./components/Type/Type";
 
 export const routes = [
   {
@@ -8,8 +9,8 @@ export const routes = [
     main: () => <Home />,
   },
   {
-    path: "/menu",
-    text: "Menu",
-    main: () => <h2>Bubblegum</h2>,
+    path: "/type",
+    text: "Type",
+    main: () => <Type />,
   },
 ];

@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { getAllPokemon, getPokemon } from "../../services/pokemon";
-import Card from "../Card/Card";
+import { getAllType, getType } from "../../services/pokemon";
+import CardType from "../Card/CartType";
 import CircularProgress from "@mui/material/CircularProgress";
 import "../../App.css";
 
-function Home() {
-  const [pokemonData, setPokemonData] = useState([]);
+function Type() {
+  const [typeData, setTypeData] = useState([]);
   const [nextUrl, setNextUrl] = useState("");
   const [previousUrl, setPreviousUrl] = useState("");
   const [loading, setLoading] = useState(true);
-  const initialUrl = "https://pokeapi.co/api/v2/pokemon";
+  const initialUrl = "https://pokeapi.co/api/v2/type";
 
   useEffect(() => {
     async function fetchData() {
-      let response = await getAllPokemon(initialUrl);
+      let response = await getAllType(initialUrl);
       setNextUrl(response.next);
       setPreviousUrl(response.previous);
-      let pokemon = await loadingPokemon(response.results);
+      let pokemon = await loadingType(response.results);
       setLoading(false);
     }
     fetchData();
@@ -24,8 +24,8 @@ function Home() {
 
   const next = async () => {
     setLoading(true);
-    let data = await getAllPokemon(nextUrl);
-    await loadingPokemon(data.results);
+    let data = await getAllType(nextUrl);
+    await loadingType(data.results);
     setNextUrl(data.next);
     setPreviousUrl(data.previous);
     setLoading(false);
@@ -34,25 +34,23 @@ function Home() {
   const prev = async () => {
     if (!previousUrl) return;
     setLoading(true);
-    let data = await getAllPokemon(previousUrl);
-    await loadingPokemon(data.results);
+    let data = await getAllType(previousUrl);
+    await loadingType(data.results);
     setNextUrl(data.next);
     setPreviousUrl(data.previous);
     setLoading(false);
   };
 
-  const loadingPokemon = async (data) => {
-    let _pokemonData = await Promise.all(
-      data.map(async (pokemon) => {
-        let pokemonRecord = await getPokemon(pokemon.url);
-        return pokemonRecord;
+  const loadingType = async (data) => {
+    let _typeData = await Promise.all(
+      data.map(async (type) => {
+        let typeRecord = await getType(type.url);
+        return typeRecord;
       })
     );
 
-    setPokemonData(_pokemonData);
+    setTypeData(_typeData);
   };
-
-  // console.log(pokemonData);
 
   return (
     <>
@@ -68,8 +66,8 @@ function Home() {
             <button onClick={next}>Next</button>
           </div>
           <div className="grid-container">
-            {pokemonData.map((pokemon, i) => {
-              return <Card key={i} pokemon={pokemon} />;
+            {typeData.map((type, i) => {
+              return <CardType key={i} type={type} />;
             })}
           </div>
           <div className="btn">
@@ -82,4 +80,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Type;
